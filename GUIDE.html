@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code 파일 업무 실습 · 강사 가이드</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#16191f;--sub:#5f6773;--line:#e2e5ea;--navy:#1f3864;--blue:#2f5bd3;--green:#24803a;--orange:#c2410c;--soft:#f7f8fa;--code:#10151f;--codeink:#eef2f8;--mono:Consolas,"D2Coding",Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 "Malgun Gothic","맑은 고딕","Apple SD Gothic Neo",sans-serif;word-break:keep-all}
+header{background:var(--navy);color:#fff;padding:14px 22px}
+header h1{margin:0;font-size:20px}
+header p{margin:2px 0 0;font-size:14px;opacity:.8}
+.tabs{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:5px;padding:9px 16px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font:inherit;font-size:14.5px;cursor:pointer;color:var(--ink)}
+.tabs button.on{background:var(--navy);border-color:var(--navy);color:#fff;font-weight:700}
+.tabs button small{opacity:.65;margin-left:4px;font-size:12px}
+main{max-width:1000px;margin:0 auto;padding:22px 18px 90px}
+h2{font-size:26px;margin:4px 0 6px;color:var(--navy)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{background:#e9edf4;color:#334;border-radius:99px;padding:2px 11px;font-size:14px}
+.chip.b{background:var(--navy);color:#fff}
+.goal{background:#fff;border-left:5px solid var(--navy);padding:10px 14px;border-radius:0 8px 8px 0;margin:8px 0 18px}
+h3{font-size:19px;margin:26px 0 10px;display:flex;align-items:center;gap:8px}
+h3 .n{background:var(--navy);color:#fff;border-radius:6px;font-size:14px;padding:1px 9px}
+h3 .n.g{background:var(--green)}
+.note{color:var(--sub);font-size:15px;margin:-4px 0 10px}
+table.files{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:15px}
+table.files td{padding:7px 12px;border-top:1px solid var(--line);vertical-align:top}
+table.files tr:first-child td{border-top:none}
+table.files td.fn{font-family:var(--mono);font-size:14px;white-space:nowrap;color:#0b3a8c;width:1%}
+table.files tr.sub td.fn{padding-left:30px;color:#4b5b77}
+table.files tr.sub td{background:var(--soft)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden}
+.card .hd{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:18px}
+.card .hd .num{background:var(--orange);color:#fff;border-radius:50%;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+.card.p .hd .num{background:var(--green)}
+.card .hd .d{margin-left:auto;font-weight:400;color:var(--sub);font-size:14px}
+.row{display:grid;grid-template-columns:84px 1fr;gap:10px;padding:9px 16px;border-top:1px dashed #eceef2}
+.row:first-of-type{border-top:none}
+.lab{font-size:14px;font-weight:700;padding-top:3px}
+.lab.say{color:var(--blue)}.lab.fl{color:#0b3a8c}
+ul.uf{margin:0;padding-left:0;list-style:none;font-size:15px}ul.uf li{margin:2px 0}ul.uf code{color:#0b3a8c}.lab.do{color:#8a5a00}.lab.in{color:var(--orange)}.lab.ok{color:var(--green)}
+.say-t{color:#1d2b55}
+.pr{position:relative;background:var(--code);color:var(--codeink);border-radius:9px;padding:11px 14px}
+.pr pre{margin:0;white-space:pre-wrap;font-family:var(--mono);font-size:15px;line-height:1.6;padding-right:120px}
+.pr .acts{position:absolute;top:8px;right:8px;display:flex;gap:6px}
+.pr button{background:#2a3446;color:#fff;border:1px solid #3c4860;border-radius:6px;padding:4px 10px;font:inherit;font-size:13px;cursor:pointer}
+.pr button.ok{background:var(--green);border-color:var(--green)}
+details{background:#fff;border:1px solid var(--line);border-radius:12px;margin:12px 0;padding:0 16px}
+details>summary{cursor:pointer;padding:12px 0;font-weight:700;font-size:17px}
+details[open]>summary{border-bottom:1px solid var(--line);margin-bottom:6px}
+details .card{border-color:#eceef2}
+table.ans{width:100%;border-collapse:collapse;font-size:15px;margin:8px 0 14px}
+table.ans td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.ans td:first-child{width:130px;font-weight:700;color:var(--navy)}
+.close{background:#eef3fb;border-radius:10px;padding:12px 16px;margin:22px 0}
+.close b{color:var(--blue)}
+.brk{background:#fff7e8;border:1px solid #f2d39a;border-radius:10px;padding:10px 14px;margin:18px 0}
+.nav{display:flex;justify-content:space-between;margin-top:26px}
+.nav button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 16px;font:inherit;cursor:pointer}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:12px 0}
+.box ol,.box ul{margin:4px 0;padding-left:22px}
+.box li{margin:3px 0}
+.kbd{font-family:var(--mono);font-size:14px;background:#eef1f6;border:1px solid #d2d7e0;border-bottom-width:2px;border-radius:5px;padding:0 6px}
+code{font-family:var(--mono);font-size:14px;background:#eef1f6;border-radius:4px;padding:0 5px}
+table.t{width:100%;border-collapse:collapse;font-size:15px;background:#fff}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+table.t th{background:#f0f3f8}
+#big{position:fixed;inset:0;background:#0b0f18;color:#f3f6fb;display:none;z-index:50;padding:6vh 6vw;flex-direction:column}
+#big.on{display:flex}
+#big pre{flex:1;margin:0;white-space:pre-wrap;font-family:var(--mono);font-size:clamp(22px,3vw,42px);line-height:1.5;overflow:auto}
+#big div{display:flex;gap:10px;justify-content:flex-end}
+#big button{background:#2a3446;color:#fff;border:1px solid #3c4860;border-radius:8px;padding:9px 18px;font:inherit;cursor:pointer}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#16191f;color:#fff;padding:8px 16px;border-radius:8px;opacity:0;transition:.2s;pointer-events:none;z-index:60}
+#toast.on{opacity:1}
+@media(max-width:700px){.row{grid-template-columns:1fr;gap:2px}.pr pre{padding-right:0;padding-top:30px}table.files td.fn{white-space:normal}}
+@media print{.tabs,.nav,.pr .acts{display:none}section{display:block!important;break-before:page}details{display:block}details>*{display:block}}
+</style>
+</head>
+<body>
+<header><h1>Claude Code 파일 업무 실습 · 강사 가이드</h1><p>삼성 TSP · 2시간 · 실습 파일 17개 · 탭을 순서대로</p></header>
+<div class="tabs" id="tabs"></div>
+<main id="main"></main>
+<div id="big"><pre id="bigp"></pre><div><button onclick="copyText(document.getElementById('bigp').textContent)">복사</button><button onclick="closeBig()">닫기 (Esc)</button></div></div>
+<div id="toast">복사됨</div>
+<script>
+const DATA = {"pages": [{"id": "prep", "tab": "준비", "html": "<h2>준비<\/h2>\n<div class=\"goal\">교육생 자료는 <b>SLIDES.html 하나<\/b>입니다. 이 가이드는 강사 노트북에서만 열고, 탭을 순서대로 넘기면 됩니다.<\/div>\n<h3><span class=\"n\">1<\/span>전날<\/h3><div class=\"box\"><ol>\n<li>교육 PC에 <b>TSP_Lab_2h_students.zip<\/b> 풀기 → Claude Code 실행 · 대화 1번 확인<\/li>\n<li>강사 PC에서 리허설 1번 (약 30분). 설치를 요청한 프로그램은 교육 PC에도 미리 설치<\/li>\n<li>(권장) 손글씨 점검표를 직접 써서 찍은 사진으로 <code>03_docs/checklist.jpg<\/code> 교체 (이름 그대로)<\/li>\n<li>리허설 후 강사 PC의 TSP_Lab은 zip에서 다시 풀어 원상태로<\/li><\/ol><\/div>\n<h3><span class=\"n\">2<\/span>흐름 (2시간)<\/h3>\n<table class=\"t\"><tr><th>시작<\/th><th>순서<\/th><th>시간<\/th><th>교육생 실습<\/th><\/tr>\n<tr><td>0:00<\/td><td>M0 오프닝<\/td><td>10분<\/td><td>1<\/td><\/tr>\n<tr><td>0:10<\/td><td>M1 파일 정리<\/td><td>25분<\/td><td>4<\/td><\/tr>\n<tr><td>0:35<\/td><td>M2 엑셀<\/td><td>35분<\/td><td>4<\/td><\/tr>\n<tr><td>1:10<\/td><td>☕ 휴식<\/td><td>5분<\/td><td><\/td><\/tr>\n<tr><td>1:15<\/td><td>M3 사진·PDF·문서<\/td><td>25분<\/td><td>4<\/td><\/tr>\n<tr><td>1:40<\/td><td>M4 미니 미션<\/td><td>15분<\/td><td>1<\/td><\/tr>\n<tr><td>1:55<\/td><td>마무리<\/td><td>5분<\/td><td><\/td><\/tr><\/table>\n<div class=\"box\" style=\"margin-top:10px\"><b>시간이 밀리면 이 순서로 줄이세요<\/b> (모듈끼리 연결이 없어 어디를 빼도 흐름이 이어집니다)<ol>\n<li>M4 미니 미션 → 강사 시연 3분으로 대체 (-12분)<\/li>\n<li>바꿔보기 생략 (모듈당 -5분)<\/li>\n<li>M3 'PDF 합치기' 생략 (-3분)<\/li><\/ol><\/div>\n<h3><span class=\"n\">3<\/span>장표와 가이드 대응<\/h3>\n<table class=\"t\"><tr><th>장표 (교육생)<\/th><th>가이드 (강사)<\/th><\/tr>\n<tr><td>시나리오 · 파일 미리보기<\/td><td>모듈 상단 '파일 설명'<\/td><\/tr>\n<tr><td>같이 하기 (복사 버튼)<\/td><td>1. 같이 하기 — 말하기 / 입력 / 확인<\/td><\/tr>\n<tr><td>내 차례: 바꿔보기 (복사 버튼, 형광 부분만 바꿈) · 혼자 하기 (프롬프트 없음)<\/td><td>2. 내 차례 — 혼자 하기 예시 답안과 정답<\/td><\/tr><\/table>"}], "mods": [{"id": "M0", "folder": "", "title": "오프닝 · 환경 확인", "time": "10분", "split": "설명 5 · 실행 5", "goal": "Claude Code를 켜고, 승인·멈춤·되돌리기를 익힌다.", "files": [["01_files ~ 04_mission", "실습 폴더 4개 (파일 총 17개)"], ["SLIDES.html", "교육생 장표 — 빔과 교육생 PC 모두 이것 하나"]], "demo": [{"t": "인사 · 진행 방식", "d": "3분", "say": "오늘은 AI에게 내 폴더의 파일 업무를 말로 시켜 봅니다. 모든 실습은 같이 하기 → 바꿔보기 → 혼자 하기, 세 단계입니다. 데이터는 전부 가상입니다.", "do": "SLIDES 2~3장 넘기며 설명"}, {"t": "Claude Code 켜기", "d": "5분", "do": "[강사 Mac] 터미널 → cd 입력 후 TSP_Lab 폴더 끌어다 놓기 → Enter → claude<br>[교육생 Windows] TSP_Lab 폴더 주소창에 cmd → Enter → claude", "p": "안녕! 지금 있는 폴더 위치와, 그 안에 있는 폴더·파일 개수를 알려줘", "check": "폴더 4개가 보이면 성공. 안 되는 PC는 돌아다니며 확인"}, {"t": "키 3개", "d": "2분", "say": "권한 창은 읽고 Yes/No. 멈출 땐 Esc, 되돌릴 땐 빈 입력창에서 Esc 두 번.", "do": "화면에서 Esc, Esc 두 번 직접 보여주기"}], "practice": [], "challenge": [], "answer": [], "close": "이제 파일 정리부터 시작합니다."}, {"id": "M1", "folder": "01_files", "title": "파일 정리", "time": "25분", "split": "같이 10 · 내 차례 10 · 여유 5", "goal": "백업 → 미리보기 → 실행 순서, 이름·확장자·형식 바꾸기.", "files": [["yield 9-1.csv", "9/1 LOT별 수율 (5행)"], ["yield 9-1 (1).csv", "위 파일 복사본"], ["report final.docx", "주간 메모 (워드)"], ["photo_line.JPEG", "현장 사진"], ["Memo.TXT", "점검 요청 메모"], ["PM plan (edited).xlsx", "10월 PM 계획 (5행)"]], "demo": [{"t": "백업부터", "d": "", "say": "정리하기 전에 규칙 1번, 백업입니다. 권한 창이 뜨면 무엇을 하려는지 읽고 승인하세요.", "p": "01_files 폴더를 TSP_Lab 안에 backup_01 폴더로 복사하고, 파일 개수가 같은지 확인해줘", "p2": null, "check": "권한 창 → 내용 읽고 승인 → 탐색기에 backup_01 폴더 생김 (6개)"}, {"t": "이름 · 확장자 정리 (미리보기 먼저)", "d": "", "say": "바로 바꾸지 말고 바뀔 결과부터 봅니다. 표를 같이 확인하고 이상 없으면 실행합니다.", "p": "01_files 파일 이름을 '날짜_내용' 형식의 짧은 영어로 바꾸고, 확장자는 모두 소문자로 통일하고 .jpeg는 .jpg로 해줘. 날짜를 모르면 생략해. 바로 바꾸지 말고 변경 전/후 표부터 보여줘", "p2": "좋아, 표대로 실행해줘", "check": "표에서 .JPEG → .jpg, .TXT → .txt 확인 후 실행. '바로 안 바꾸고 표부터'가 핵심"}], "practice": [{"t": "바꿔보기 · 형식 바꾸기", "p": "01_files 의 CSV 파일을 엑셀(xlsx)로 변환해줘. 원본은 그대로 둬", "check": "한 번 실행한 뒤, 형광 부분만 바꿔서 이번엔 엑셀 파일을 CSV로 만들어 보세요. → xlsx 생성 → 바꿔서 PM plan 엑셀이 csv로 생성"}, {"t": "혼자 하기 · 중복 파일 찾기 (예시 답안 — 장표에는 없음)", "p": "01_files 에서 내용이 완전히 같은 중복 파일을 찾아서 목록만 보여줘. 삭제는 하지 마", "check": "yield 9-1 (1).csv = yield 9-1.csv (내용 완전히 같음) — 앞에서 이름을 바꿨으면 새 이름으로 나옴"}], "challenge": [], "answer": [["중복", "yield 9-1 (1).csv = yield 9-1.csv (내용 완전히 같음)"], ["확장자", ".JPEG → .jpg, .TXT → .txt (2개)"]], "close": "백업 먼저, 바꾸기 전에 미리보기. 이 두 가지가 오늘 내내 쓰는 습관입니다."}, {"id": "M2", "folder": "02_excel", "title": "엑셀 합치기 · 계산 · 검수", "time": "35분", "split": "같이 12 · 내 차례 16 · 여유 7", "goal": "합치기 → 계산 → 시트 복사 → 차트 → 오류 찾기. 기준을 문장에 넣는 법.", "files": [["line_A.csv", "A라인 9/1~10 실적 (10행)"], ["line_B.csv", "B라인 9/1~10 실적 (10행)"], ["line_C.csv", "C라인 9/1~10 실적 (10행)"]], "demo": [{"t": "3개 합치기 + 수율 계산", "d": "", "say": "복사·붙여넣기 대신 한 문장입니다. 수율 공식을 직접 알려주는 게 포인트입니다.", "p": "02_excel 의 CSV 3개를 하나로 합치고 수율(%) 열을 추가해서 02_excel/merged.xlsx 로 저장해줘. 수율 = 양품 ÷ 투입 × 100, 소수점 둘째 자리", "p2": null, "check": "30행 엑셀. Claude가 B라인의 이상한 값을 먼저 알려줄 수 있음 → '좋은 신호'라고 짚기. 확인 후 엑셀 닫기"}, {"t": "시트 복사해서 골라내기", "d": "", "say": "원본 시트는 그대로 두고 복사본에서 작업합니다. 98% 미만 행에 공통점이 보이나요?", "p": "02_excel/merged.xlsx 의 시트를 복사해서 '98%미만' 시트를 만들고, 수율 98% 미만 행만 남겨서 빨간색으로 표시해줘. 원래 시트는 그대로 둬", "p2": null, "check": "시트 2개. 98% 미만 8행 안팎 — 모두 WB-03이라는 점을 질문으로 던지기"}], "practice": [{"t": "바꿔보기 · 차트 그리기", "p": "02_excel/merged.xlsx 로 라인별 평균 수율을 막대그래프 PNG로 그려줘. 한글이 깨지지 않게 해줘", "check": "한 번 실행한 뒤, 형광 부분을 '설비별'로 바꿔 보세요. 무엇이 눈에 띄나요? → 라인별은 차이 작음 → 설비별에서 WB-03만 뚝 떨어짐"}, {"t": "혼자 하기 · 오류 찾기 (예시 답안 — 장표에는 없음)", "p": "02_excel/line_B.csv 에서 빈칸, 말이 안 되는 숫자(양품이 투입보다 큰 값), 형식이 다른 날짜를 찾아서 행 번호와 함께 목록으로 보여줘. 원본은 고치지 마", "check": "5행 양품 빈칸 / 7행 양품이 투입보다 큼 / 9행 날짜 형식 다름 (9월8일)"}], "challenge": [], "answer": [["합친 행 수", "30행"], ["라인별 평균", "A라인 98.42% · B라인 98.22% · C라인 98.6%"], ["설비별 평균", "WB-01 98.78% · WB-02 98.94% · WB-03 97.27% · WB-04 98.94%"], ["98% 미만", "8행 — 모두 WB-03 (오류 행 제외 기준)"], ["line_B 오류 3개", "5행 TL260904B 양품 빈칸 / 7행 TL260906B 양품이 투입보다 큼 / 9행 TL260908B 날짜 형식 다름 (9월8일)"]], "close": "AI는 시킨 만큼만 합니다. 기준을 문장에 넣을수록 결과가 정확해집니다."}, {"id": "M3", "folder": "03_docs", "title": "사진 · PDF · 문서", "time": "25분", "split": "같이 10 · 내 차례 11 · 여유 4", "goal": "사진·PDF·영문 문서·메모를 표와 문서로 바꾸기.", "files": [["checklist.jpg", "손글씨 점검표 사진"], ["report_A.pdf", "성적서 1장"], ["report_B.pdf", "성적서 1장"], ["manual_EN.pdf", "영문 장비 매뉴얼 1장"], ["meeting_memo.txt", "급하게 적은 회의 메모"]], "demo": [{"t": "손글씨 사진 → 엑셀", "d": "", "say": "종이 점검표를 찍어서 넘기면 엑셀이 됩니다. 애매한 글씨는 표시하게 시킵니다.", "p": "03_docs/checklist.jpg 를 읽어서 엑셀 표로 옮겨줘. 특이사항은 표 아래에 적고, 글씨가 애매한 칸은 노란색으로 칠해줘", "p2": null, "check": "WB-01~04 4행 + 특이사항. 노란 칸이 있으면 '사람이 확인할 곳'이라고 짚기"}, {"t": "PDF 2개 합치기", "d": "", "say": "성적서 두 장을 한 파일로 보내야 할 때입니다.", "p": "03_docs 의 report_A.pdf 와 report_B.pdf 를 하나로 합쳐서 03_docs/reports_merged.pdf 로 저장해줘", "p2": null, "check": "2페이지 PDF"}], "practice": [{"t": "바꿔보기 · 영문 매뉴얼 활용", "p": "03_docs/manual_EN.pdf 를 한국어로 3줄 요약해줘", "check": "한 번 실행한 뒤, 형광 부분을 바꿔 보세요. 예: 'ALM-1203 알람의 조치 방법만 찾아', '번역해서 워드 파일로 저장' → ALM-1203 = 캐필러리 마모 → 수명 초과 시 교체 / 권장수명 100만 회 / 예비품 2개"}, {"t": "혼자 하기 · 회의록 만들기 (예시 답안 — 장표에는 없음)", "p": "03_docs/meeting_memo.txt 를 '결정사항 / 담당 / 기한' 표가 들어간 회의록 워드 문서로 만들어서 03_docs/minutes_0918.docx 로 저장해줘", "check": "캐필러리 교체(이서연, 9/18 14시) / WB-03 경유 LOT 재검사(박지훈, 9/20) / 예비 캐필러리 구매요청(김민수, 9/22)"}], "challenge": [], "answer": [["점검표", "WB-01~04 4행 표, 특이사항 'WB-03 와이어 끊김 오전 3번, 예비 캐필러리 없음'"], ["매뉴얼", "ALM-1203 = 캐필러리 마모 → 수명 초과 시 교체 / 권장수명 100만 회 / 예비품 2개"], ["회의록 결정사항", "캐필러리 교체 — 이서연, 9/18 14시 / WB-03 경유 LOT 재검사 — 박지훈, 9/20 / 예비 캐필러리 구매요청 — 김민수, 9/22"]], "close": "사진·PDF·메모 모두 데이터가 됩니다. 애매한 곳은 표시하게 시키고, 확인은 사람이 합니다."}, {"id": "M4", "folder": "04_mission", "title": "미니 미션: 이번 주 보고", "time": "15분", "split": "안내 2 · 미션 12 · 공유 1", "goal": "오늘 배운 것을 합쳐 이번 주 보고 PPT 3장 만들기 (혼자 또는 짝과).", "files": [["week_output.xlsx", "3주차 라인별 실적 (15행)"], ["issue_memo.txt", "이번 주 이슈 메모 3줄"], ["report_template.pptx", "보고 양식 PPT 3장"]], "demo": [{"t": "미션 안내", "d": "2분", "say": "팀장님이 '이번 주 라인 현황을 3장으로 정리해 달라'고 합니다. 오늘 배운 걸 합쳐서 혼자(또는 짝과) 해결합니다. 장표의 TIP만 보고 직접 프롬프트를 쓰세요.", "do": "SLIDES 미션 2장 띄우고 12분 타이머"}, {"t": "순회 · 막힌 사람 도와주기", "d": "12분", "do": "5분째: 수율 계산 못 한 사람에게 '공식을 문장에 넣었나요?' · 9분째: '양식 파일 이름을 지정했나요?' · 시간이 밀렸으면 이 모듈은 강사 시연(아래 예시 1→3)으로 대체"}, {"t": "공유", "d": "1분", "do": "1명 화면 공유 → 어떤 순서로 시켰는지만 묻기"}], "practice": [{"t": "막힌 사람에게 보여줄 예시 1 · 계산", "p": "04_mission/week_output.xlsx 로 라인별 수율(양품 ÷ 투입 × 100)을 계산해서 표로 보여줘", "check": "A·B·C 라인 수율"}, {"t": "예시 2 · 원인", "p": "수율이 가장 낮은 라인과 설비를 찾고, 04_mission/issue_memo.txt 에서 관련 원인을 찾아줘. 근거 파일도 같이 적어줘", "check": "메모 1번: WB-03 캐필러리 수명 초과 추정, 9/18 교체"}, {"t": "예시 3 · PPT", "p": "지금까지 결과로 04_mission/report_template.pptx 디자인 그대로 3장 보고서를 만들어서 04_mission/weekly_report.pptx 로 저장해줘", "check": "양식(초록 상단바) 유지된 3장"}], "challenge": [], "answer": [["라인별 수율", "A라인 99.12% · B라인 97.0% · C라인 98.91%"], ["가장 낮은 곳", "B라인 (WB-03)"], ["원인", "메모 1번: WB-03 캐필러리 수명 초과 추정, 9/18 교체"]], "close": "세 단계로 나눠서 시키면 됩니다. 한 번에 다 시키면 확인할 곳이 많아집니다."}, {"id": "M5", "folder": "", "title": "마무리", "time": "5분", "split": "정리 3 · 질문 2", "goal": "오늘 습관 4가지와 내 업무에 쓸 문장 공식을 가져간다.", "files": [["(파일 없음)", "마지막 장표만 사용"]], "demo": [{"t": "마무리 멘트", "d": "3분", "do": "SLIDES 마지막 장 띄우기", "say": "오늘 가져갈 것 네 가지: 백업 먼저, 미리보기, 기준을 문장에, 숫자 확인. 회사 데이터는 사내 정책이 허용하는 범위에서만 쓰세요."}], "practice": [], "challenge": [], "answer": [], "close": ""}], "tail": [{"id": "help", "tab": "도움말", "html": "<h2>도움말<\/h2><table class=\"t\"><tr><th style=\"width:38%\">상황<\/th><th>이렇게<\/th><\/tr>\n<tr><td>엑셀 저장이 안 됨<\/td><td>엑셀이 열려 있음 → 닫고 '다시 저장해줘'<\/td><\/tr>\n<tr><td>결과가 조금 다름<\/td><td>정상. 숫자만 정답과 맞으면 됨<\/td><\/tr>\n<tr><td>잘못 실행함<\/td><td>빈 입력창에서 Esc 두 번 → 되돌리기. 또는 backup 폴더에서 복구<\/td><\/tr>\n<tr><td>엉뚱한 걸 계속 함<\/td><td>Esc → '그게 아니라 ~해줘'. 길어지면 /clear<\/td><\/tr>\n<tr><td>차트 한글이 □□□<\/td><td>'한글 글꼴(맑은 고딕)로 다시 그려줘'<\/td><\/tr>\n<tr><td>프로그램 설치를 물어봄<\/td><td>허용된 환경이면 승인<\/td><\/tr>\n<tr><td>M1 이후 파일 이름이 바뀌어 있음<\/td><td>정상 (M1에서 바꿨기 때문). 바꿔보기·혼자 하기 프롬프트는 이름 대신 종류(CSV 파일 등)로 지정되어 있어 그대로 동작<\/td><\/tr><\/table>"}], "extra": [], "extraAns": [], "breaks": {"M2": "휴식 5분 — 늦은 PC는 merged.xlsx 만들기까지만 도와주기"}, "start": {"M0": "0:00", "M1": "0:10", "M2": "0:35", "M3": "1:15", "M4": "1:40", "M5": "1:55"}};
+const MODE = "ins";
+const T = s => s == null ? "" : String(s);
+const esc = s => T(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const P = [];
+function pbox(t){const i=P.push(t)-1;return `<div class="pr"><pre>${esc(t)}</pre><div class="acts"><button onclick="cp(${i},this)">복사</button><button onclick="big(${i})">크게</button></div></div>`}
+function row(cls,lab,html){return html?`<div class="row"><div class="lab ${cls}">${lab}</div><div>${html}</div></div>`:""}
+const FD={};
+function addFD(files,folder){let parent="";files.forEach(([n,d])=>{const k=n.trim().replace(/\/$/,"");let full;if(!n.startsWith("  ")){parent=k;full=(folder?folder+"/":"")+k}else{full=(folder?folder+"/":"")+parent+"/"+k}if(folder)FD[full]={n:k,d:d}})}
+DATA.mods.forEach(m=>addFD(m.files,m.folder));DATA.extra.forEach(e=>addFD(e.files,e.folder));
+function usedFiles(text){if(!text)return [];const out=[];Object.keys(FD).sort((a,b)=>b.length-a.length).forEach(k=>{const re=new RegExp(k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"(?![A-Za-z0-9_])");if(re.test(text)&&!out.some(o=>o.startsWith(k)))out.push(k)});return out}
+function usedRow(...texts){const u=[...new Set(texts.flatMap(usedFiles))];if(!u.length)return "";return row("fl","사용 파일",`<ul class="uf">${u.map(k=>`<li><code>${esc(FD[k].n)}</code> ${FD[k].d}</li>`).join("")}</ul>`)}
+function filesTable(files){return `<table class="files">${files.map(([n,d])=>`<tr class="${n.startsWith("  ")?"sub":""}"><td class="fn">${esc(n.trim())}</td><td>${d}</td></tr>`).join("")}</table>`}
+function demoCard(s,i){
+  let b="";
+  if(MODE==="ins"){b+=row("say","말하기",s.say?`<span class="say-t">“${s.say}”</span>`:"");b+=row("do","하기",s.do);}
+  b+=usedRow(s.p,s.p2);
+  b+=row("in","입력",s.p?pbox(s.p):"");
+  if(MODE==="ins") b+=row("ok","확인",s.check);
+  b+=row("in","이어서 입력",s.p2?pbox(s.p2):"");
+  if(MODE==="ins") b+=row("ok","확인",s.check2);
+  if(!b) return "";
+  return `<div class="card"><div class="hd"><span class="num">${i}</span>${s.t}<span class="d">${MODE==="ins"?T(s.d):""}</span></div>${b}</div>`;
+}
+function pracCard(s,i,cls){
+  let b=usedRow(s.p,s.p2)+row("in","입력",pbox(s.p));
+  if(MODE==="ins") b+=row("ok","확인",s.check);
+  b+=row("in","이어서 입력",s.p2?pbox(s.p2):"");
+  return `<div class="card ${cls}"><div class="hd"><span class="num">${i}</span>${s.t}</div>${b}</div>`;
+}
+function modView(m){
+  let h=`<h2>${m.id} · ${m.title}</h2><div class="chips"><span class="chip b">${m.time}</span>${MODE==="ins"?`<span class="chip">시작 ${DATA.start[m.id]}</span><span class="chip">${m.split}</span>`:""}${m.folder?`<span class="chip">작업 폴더: ${m.folder}</span>`:""}</div>`;
+  h+=`<div class="goal">${m.goal}</div>`;
+  if(MODE==="ins"&&m.clue) h+=`<div class="brk" style="margin-top:-8px">🔎 <b>강사만</b> · ${m.clue}</div>`;
+  h+=`<details${m.files.length<=8?" open":""}><summary>📁 이 모듈 파일 설명 (${m.files.length}개)${m.folder?` — 모두 <code>${m.folder}</code> 폴더 안`:""}</summary>${filesTable(m.files)}</details>`;
+  const demos=m.demo.filter(d=>MODE==="ins"||d.p);
+  if(MODE==="ins"){
+    h+=`<h3><span class="n">1</span>같이 하기 <span style="font-weight:400;font-size:15px;color:#5f6773">강사와 교육생이 동시에 입력</span></h3>`+demos.map((d,i)=>demoCard(d,i+1)).join("");
+    const isM7=m.id==="M7";
+    if(m.practice.length) h+=`<h3><span class="n g">2</span>내 차례 <span style="font-weight:400;font-size:15px;color:#5f6773">교육생 혼자 · 장표에는 바꿔보기 프롬프트만 있고 혼자 하기는 프롬프트 없음</span></h3>`;
+    h+=m.practice.map((p,i)=>pracCard(p,i+1,"p")).join("");
+  } else {
+    if(demos.length) h+=`<details><summary>강사 시연 따라 하기 (놓쳤을 때)</summary>${demos.map((d,i)=>demoCard(d,i+1)).join("")}</details>`;
+    if(m.id!=="M7") h+=`<h3><span class="n g">실습</span>순서대로 해보세요</h3>`+m.practice.map((p,i)=>pracCard(p,i+1,"p")).join("");
+    else h+=`<h3><span class="n g">미션</span>MISSION.txt 를 읽고 조별로 해결하세요</h3><div class="box">프롬프트는 조에서 직접 설계합니다. 막히면 강사에게 힌트를 요청하세요.<br>결과물은 <code>M7_mission/output</code> 폴더에 저장합니다.</div>`;
+  }
+  if(m.challenge&&m.challenge.length) h+=`<details><summary>빨리 끝난 분 — 도전 과제 ${m.challenge.length}개</summary>${m.challenge.map((p,i)=>pracCard(p,i+1,"p")).join("")}</details>`;
+  if(MODE==="ins"&&m.answer&&m.answer.length) h+=`<details><summary>정답 보기 (강사용)</summary><table class="ans">${m.answer.map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join("")}</table></details>`;
+  if(MODE==="ins"&&m.close) h+=`<div class="close"><b>마무리 한마디</b> “${m.close}”</div>`;
+  if(MODE==="ins"&&DATA.breaks[m.id]) h+=`<div class="brk"><b>☕ ${DATA.breaks[m.id]}</b></div>`;
+  return h;
+}
+function extraView(){
+  let h=`<h2>추가 실습 (extra 폴더)</h2><div class="goal">빨리 끝난 분, 시간이 남을 때, 교육 후 복습용입니다. 원하는 것을 골라서 하세요.</div>`;
+  DATA.extra.forEach(e=>{h+=`<details><summary>${e.id} · ${e.title}  <span style="font-weight:400;color:#5f6773;font-size:14px">(${e.folder})</span></summary>${filesTable(e.files)}${e.prompts.map((p,i)=>pracCard({t:"실습 "+(i+1),p},i+1,"p")).join("")}</details>`});
+  if(MODE==="ins") h+=`<details><summary>추가 실습 정답 (강사용)</summary><table class="ans">${DATA.extraAns.map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join("")}</table></details>`;
+  return h;
+}
+const views = [];
+DATA.pages.forEach(p=>views.push(p));
+DATA.mods.forEach(m=>views.push({id:m.id,tab:m.id,sub:m.title.split(" · ")[0],mod:m}));
+if(DATA.extra.length) views.push({id:"extra",tab:"추가 실습",html:null,extra:true});
+DATA.tail.forEach(p=>views.push(p));
+function render(id){
+  const v=views.find(x=>x.id===id)||views[0];
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.id===v.id));
+  P.length=0;
+  let h=v.mod?modView(v.mod):v.extra?extraView():v.html;
+  const i=views.indexOf(v);
+  h+=`<div class="nav">${i>0?`<button onclick="go('${views[i-1].id}')">◀ ${views[i-1].tab}</button>`:"<span></span>"}${i<views.length-1?`<button onclick="go('${views[i+1].id}')">${views[i+1].tab} ▶</button>`:""}</div>`;
+  document.getElementById("main").innerHTML=h;
+  window.scrollTo(0,0);
+}
+function go(id){location.hash=id}
+window.addEventListener("hashchange",()=>render(location.hash.slice(1)));
+document.getElementById("tabs").innerHTML=views.map(v=>`<button data-id="${v.id}" onclick="go('${v.id}')">${v.tab}${v.sub&&MODE==="ins"?`<small>${v.sub}</small>`:""}</button>`).join("");
+function copyText(t){const done=()=>{const e=document.getElementById("toast");e.classList.add("on");setTimeout(()=>e.classList.remove("on"),1000)};
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(done,()=>fb(t,done))}else fb(t,done)}
+function fb(t,done){const a=document.createElement("textarea");a.value=t;a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(e){}a.remove();done()}
+function cp(i,b){copyText(P[i]);b.textContent="복사됨";b.classList.add("ok");setTimeout(()=>{b.textContent="복사";b.classList.remove("ok")},1200)}
+function big(i){document.getElementById("bigp").textContent=P[i];document.getElementById("big").classList.add("on")}
+function closeBig(){document.getElementById("big").classList.remove("on")}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeBig()});
+render(location.hash.slice(1));
+</script>
+</body>
+</html>
